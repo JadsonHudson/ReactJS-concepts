@@ -7,16 +7,14 @@ function App() {
   const [repositories, setRepositories] = useState([])
 
   useEffect(() => {
-    async function loadRepositories(){
-      const response = await api.get('repositories');
-      setRepositories(response.data);
-    }
-    loadRepositories();
+      api.get('repositories').then(response=>{
+        setRepositories(response.data);
+      });
   }, [])
 
   async function handleAddRepository() {
     const body = {
-      title: `repository ${Math.random()}`,
+      title: `repository ${Date.now()}`,
       url: 'oaisdoiajsd',
       techs: ['React', 'Flutter', 'Angular']
     };
@@ -26,10 +24,8 @@ function App() {
   }
 
   async function handleRemoveRepository(id) {
-
     await api.delete(`/repositories/${id}`);
-    const newRepositories =  repositories.filter(repository => repository.id !== id);
-    setRepositories(newRepositories)
+    setRepositories(repositories.filter(repository => repository.id !== id));
   }
 
   return (
